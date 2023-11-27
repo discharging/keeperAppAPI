@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Connecting to database
-mongoose.connect(process.env.CONNECTION_STRING);
+mongoose.connect(process.env.DEV_CON_STRING);
 
 // Creating Schemas
 const noteSchema = new mongoose.Schema({
@@ -73,6 +73,29 @@ app.post("/delete/:id", async (req, res) => {
       console.error("erro at hear" + error);
       res.status(500).send("Server error");
     });
+});
+app.put("/update/:id", async function (req, res) {
+  const { id } = req.params;
+
+  try {
+    const updatedNote = await Note.findByIdAndUpdate(
+      id,
+      {
+        title: req.body.title,
+        content: req.body.content,
+      },
+      { new: true }
+    );
+
+    if (!updatedNote) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    res.status(200).json({ message: "Note updated successfully", updatedNote });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
+  }
 });
 
 app.listen(process.env.PORT, function () {
