@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Connecting to database
-mongoose.connect(process.env.DEV_CON_STRING);
+mongoose.connect(process.env.CONNECTION_STRING);
 
 // Creating Schemas
 const noteSchema = new mongoose.Schema({
