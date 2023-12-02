@@ -50,7 +50,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Connecting to database
-mongoose.connect(process.env.CONNECTION_STRING_DEV);
+mongoose.connect(process.env.CONNECTION_STRING);
 
 const note1 = new Note({
   title: "Boost Productivity",
