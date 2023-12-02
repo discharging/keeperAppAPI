@@ -36,7 +36,6 @@ async function verifyToken(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, `${process.env.SECRET}`);
-    console.log(decoded);
     req.userId = decoded._id;
     next();
   } catch (err) {
@@ -115,7 +114,6 @@ app.post("/register", async function (req, res) {
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-
     // Validate credentials
     if (!email || !password) {
       return res.status(400).json({ error: "Missing credentials" });
@@ -131,8 +129,16 @@ app.post("/login", async (req, res) => {
 
     // Token on successful login
     const token = generateToken(user);
+    const newUser = {
+      _id: user._id,
+      fname: user.fname,
+      lname: user.lname,
+      email: user.email,
+      notes: user.notes,
+      __v: user.__v,
+    };
 
-    res.status(200).json({ token });
+    res.status(200).json({ token, newUser });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -272,7 +278,7 @@ app.delete("/notes/:noteId", verifyToken, async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
+//to update notes
 app.put("/notes/:noteId", verifyToken, async (req, res) => {
   try {
     // Ensure that the user is valid (was authenticated via verifyToken middleware)
