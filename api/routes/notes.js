@@ -128,7 +128,7 @@ router.put("/:noteId", verifyToken, async (req, res) => {
     if (noteIndex === -1) {
       return res.status(404).json({ error: "Note not found" });
     }
-
+    console.log(req.body);
     // Update note text
     user.notes[noteIndex].title = req.body.title;
     user.notes[noteIndex].content = req.body.content;
